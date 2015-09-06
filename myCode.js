@@ -192,13 +192,13 @@ try {
         var _SCARD_IO_REQUEST = new SCARD_IO_REQUEST;
         _SCARD_IO_REQUEST.dwProtocol = CONST.SCARD_PROTOCOL_T0|CONST.SCARD_PROTOCOL_T1;
         _SCARD_IO_REQUEST.cbPciLength =  _SCARD_IO_REQUEST.dwProtocol.toString().length;  
-        var command = ctypes.char.array(42)("0xa4040010a0000000183003010000000000000000");
+        var command = TYPES.LPBYTE.targetType.array(42)("0xa4040010a0000000183003010000000000000000");
         
         var commandLength = command.toString().length;
-        var response = TYPES.LPBYTE;
-        var responseLength = TYPES.LPDWORD;
+        var response = TYPES.BYTE();
+        var responseLength = TYPES.DWORD();
         
-        var rez_SCT = SCardTransmit(cardHandle, _SCARD_IO_REQUEST.address(), command, commandLength, null, response, responseLength);
+        var rez_SCT = SCardTransmit(cardHandle, _SCARD_IO_REQUEST.address(), command, commandLength, null, response.address(), responseLength.address());
         if(rez_SCT.toString() != CONST.SCARD_S_SUCCESS.toString())
         {
           console.error('cannot begin transaction, error code was: ' + rez_SCT + ' in other terms it is: 0x' + rez_SCT.toString(16) + ' you can look up this error value here: https://msdn.microsoft.com/en-us/library/windows/desktop/aa374738%28v=vs.85%29.aspx#smart_card_return_values');
