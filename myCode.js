@@ -46,9 +46,9 @@ var CONST = {
     //pioSendRequest: SCARD_IO_REQUEST
     
 };
-/*const SCARD_IO_REQUEST = new ctypes.StructType("myStruct" ,
+var SCARD_IO_REQUEST = new ctypes.StructType("myStruct" ,
                        [{"dwProtocol": TYPES.DWORD},
-                        {"cbPciLength": TYPES.DWORD}]);*/
+                        {"cbPciLength": TYPES.DWORD}]);
 
 //x = SCARD_IO_REQUEST();
 //SCARD_IO_REQUEST.cbPciLength = CONST.SCARD_PROTOCOL_T0;
