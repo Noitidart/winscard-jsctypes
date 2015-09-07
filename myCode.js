@@ -1,3 +1,4 @@
+
 Cu.import('resource://gre/modules/ctypes.jsm');
 /*var {Cu} = require("chrome");
 var{ctypes} = Cu.import("resource://gre/modules/ctypes.jsm", null);*/
@@ -180,29 +181,29 @@ try {
           console.error('cannot retrieve status of smart card, error code was: ' + rez_SCS + ' in other terms it is: 0x' + rez_SCS.toString(16) + ' you can look up this error value here: https://msdn.microsoft.com/en-us/library/windows/desktop/aa374738%28v=vs.85%29.aspx#smart_card_return_values');
           throw new Error('failed to retrieve status!');
      }*/
-//----------------------------SCardBeginTransaction------------------------------
-		 var rez_SCBT = SCardBeginTransaction(cardHandle);
-     if(rez_SCBT.toString() != CONST.SCARD_S_SUCCESS.toString())
-     {
-          console.error('cannot begin transaction, error code was: ' + rez_SCBT + ' in other terms it is: 0x' + rez_SCBT.toString(16) + ' you can look up this error value here: https://msdn.microsoft.com/en-us/library/windows/desktop/aa374738%28v=vs.85%29.aspx#smart_card_return_values');
-          throw new Error('failed to begin transactio!');
-      }//----------------------------transmission------------------------------
+//	-------------------------transmission------------------------------
        
-
         var _SCARD_IO_REQUEST = new SCARD_IO_REQUEST;
-        _SCARD_IO_REQUEST.dwProtocol = CONST.SCARD_PROTOCOL_T0|CONST.SCARD_PROTOCOL_T1;
-        _SCARD_IO_REQUEST.cbPciLength =  _SCARD_IO_REQUEST.dwProtocol.toString().length;  
-        var command = TYPES.LPBYTE.targetType.array(42)("0xa4040010a0000000183003010000000000000000");
+        _SCARD_IO_REQUEST.dwProtocol = AProtocol;
+        _SCARD_IO_REQUEST.cbPciLength =  SCARD_IO_REQUEST.size;  
+        var command = TYPES.LPBYTE.targetType.array(21)([0, 164, 4, 0 , 16, 160, 0,0,0,24,48,3,1,0,0,0,0,0,0,0,0]);
         
-        var commandLength = command.toString().length;
-        var response = TYPES.BYTE();
+        var commandLength = 21;
+        //var response = TYPES.BYTE();
         var responseLength = TYPES.DWORD();
         
-        var rez_SCT = SCardTransmit(cardHandle, _SCARD_IO_REQUEST.address(), command, commandLength, null, response.address(), responseLength.address());
+        var rez_SCT = SCardTransmit(cardHandle, _SCARD_IO_REQUEST.address(), command, commandLength, null, null, responseLength.address());
         if(rez_SCT.toString() != CONST.SCARD_S_SUCCESS.toString())
         {
           console.error('cannot begin transaction, error code was: ' + rez_SCT + ' in other terms it is: 0x' + rez_SCT.toString(16) + ' you can look up this error value here: https://msdn.microsoft.com/en-us/library/windows/desktop/aa374738%28v=vs.85%29.aspx#smart_card_return_values');
-          throw new Error('failed to begin transactio!');
+          throw new Error('failed to begin transmission!');
+         }
+        	var response = TYPES.LPBYTE.targetType.array(parseInt(responseLength.value))();
+        var rez_SCT = SCardTransmit(cardHandle, _SCARD_IO_REQUEST.address(), command, commandLength, null, response, responseLength.address());
+        if(rez_SCT.toString() != CONST.SCARD_S_SUCCESS.toString())
+        {
+          console.error('cannot begin transaction, error code was: ' + rez_SCT + ' in other terms it is: 0x' + rez_SCT.toString(16) + ' you can look up this error value here: https://msdn.microsoft.com/en-us/library/windows/desktop/aa374738%28v=vs.85%29.aspx#smart_card_return_values');
+          throw new Error('failed to begin transmission!');
          }
         
 		
@@ -226,8 +227,4 @@ try {
     cardLib.close();
     console.log('cardLib closed');
 }
-
-
-
-
 
