@@ -186,9 +186,9 @@ try {
         var _SCARD_IO_REQUEST = new SCARD_IO_REQUEST;
         _SCARD_IO_REQUEST.dwProtocol = AProtocol;
         _SCARD_IO_REQUEST.cbPciLength =  SCARD_IO_REQUEST.size;  
-        var command = TYPES.LPBYTE.targetType.array(21)([0, 164, 4, 0 , 16, 160, 0,0,0,24,48,3,1,0,0,0,0,0,0,0,0]);
+        var command = TYPES.LPBYTE.targetType.array(21)([0, 164, 4, 0, 16, 160, 0, 0, 0, 24, 48, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0]);
         
-        var commandLength = 21;
+        var commandLength = command.length;
         //var response = TYPES.BYTE();
         var responseLength = TYPES.DWORD();
         
