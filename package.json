@@ -1,0 +1,13 @@
+{
+  "title": "Matiran Sconnect",
+  "name": "sconnect",
+  "version": "0.0.1",
+  "description": "A PCSCWrapper for Sconnect",
+  "main": "index.js",
+  "author": "Hosein Aghajani",
+  "engines": {
+    "firefox": ">=38.0a1",
+    "fennec": ">=38.0a1"
+  },
+  "license": "Matiran"
+}
